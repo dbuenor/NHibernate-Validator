@@ -13,7 +13,7 @@ namespace NHibernate.Validator.Interpolator
 	public class DefaultMessageInterpolatorAggregator : IMessageInterpolator, ISerializable
 	{
 		private readonly IDictionary<IValidator, DefaultMessageInterpolator> interpolators;
-			
+
 		//transient but repopulated by the object owing a reference to the interpolator
 		[NonSerialized] private CultureInfo culture;
 		[NonSerialized] private ResourceManager defaultMessageBundle;
@@ -52,6 +52,13 @@ namespace NHibernate.Validator.Interpolator
 		}
 
 		#endregion
+
+		public void TrySetCultureFor(InterpolationInfo info, CultureInfo culture)
+		{
+			DefaultMessageInterpolator defaultMessageInterpolator;
+			if (interpolators.TryGetValue(info.Validator, out defaultMessageInterpolator))
+				defaultMessageInterpolator.SetCulture(culture);
+		}
 
 		public void Initialize(ResourceManager messageBundle, ResourceManager defaultMessageBundle, CultureInfo culture)
 		{

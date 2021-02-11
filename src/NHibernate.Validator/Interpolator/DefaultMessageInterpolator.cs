@@ -63,6 +63,13 @@ namespace NHibernate.Validator.Interpolator
 			this.defaultMessageBundle = defaultMessageBundle;
 		}
 
+		internal void SetCulture(CultureInfo culture)
+		{
+			this.culture = culture ?? CultureInfo.CurrentCulture;
+			// XXX: We re-set interpolate message to clear previous value to force Interpolation to replace values with new culture set.
+			this.interpolateMessage = null;
+		}
+
 		public void Initialize(Attribute attribute)
 		{
 			//Get all parametters of the Attribute: the name and their values.
@@ -86,7 +93,7 @@ namespace NHibernate.Validator.Interpolator
 "Or you can use interpolators with resources files:\n" +
 "-private string message = \"{validator.MyValidatorMessage}\";");
 				}
-				
+
 				attributeMessage = ruleArgs.Message;
 			}
 
